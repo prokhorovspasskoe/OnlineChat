@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="client_api.client_gui.MainChatController"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <VBox visible="false" fx:id="changePasswordPanel">
+        <HBox VBox.vgrow="ALWAYS">
+            <VBox>
+                <Label text = "Please enter your old password:"/>
+                <PasswordField fx:id="oldPassField" onAction="#sendChangePass"/>
+            </VBox>
+            <VBox>
+                <Label text = "Please enter your new password:"/>
+                <PasswordField fx:id="newPasswordField" onAction="#sendChangePass"/>
+            </VBox>
+        </HBox>
+        <Button text = "SEND" onAction="#sendChangePass"/>
+        <Button text = "RETURN" onAction="#returnToChat"/>
+    </VBox>
+
+    <VBox visible="false" fx:id="changeNickPanel">
+        <HBox VBox.vgrow="ALWAYS">
+            <VBox>
+                <Label text = "Please enter your new nickname:"/>
+                <TextField fx:id="newNickField" onAction="#sendChangeNick"/>
+            </VBox>
+        </HBox>
+        <Button text = "SEND" onAction="#sendChangeNick"/>
+        <Button text = "RETURN" onAction="#returnToChat"/>
+    </VBox>
+
+    <VBox visible="true" fx:id="loginPanel">
+        <HBox VBox.vgrow="ALWAYS">
+            <VBox>
+                <Label text = "Please enter your login:"/>
+                <TextField fx:id="loginField" onAction="#sendAuth"/>
+            </VBox>
+            <VBox>
+                <Label text = "Please enter your password:"/>
+                <PasswordField fx:id="passwordField" onAction="#sendAuth"/>
+            </VBox>
+        </HBox>
+        <Button text = "SEND" onAction="#sendAuth"/>
+    </VBox>
+
+    <VBox visible="false" fx:id="registerPanel">
+        <HBox VBox.vgrow="ALWAYS">
+            <VBox>
+                <Label text = "Please enter your login:"/>
+                <TextField fx:id="registerLoginField" onAction="#sendRegister"/>
+            </VBox>
+            <VBox>
+                <Label text = "Please enter your password:"/>
+                <PasswordField fx:id="registerPasswordField" onAction="#sendRegister"/>
+            </VBox>
+            <VBox>
+                <Label text = "Please enter your nickname:"/>
+                <TextField fx:id="registerNickNameField" onAction="#sendRegister"/>
+            </VBox>
+        </HBox>
+        <Button text = "SEND" onAction="#sendRegister"/>
+    </VBox>
+
+    <VBox fx:id="mainChatPanel" visible="false">
+        <MenuBar>
+            <Menu text="File">
+                <MenuItem text="Item1" onAction="#mockAction"/>
+                <MenuItem text="Item2" onAction="#mockAction"/>
+                <MenuItem text="Item3" onAction="#mockAction"/>
+                <MenuItem text="Item4" onAction="#mockAction"/>
+                <MenuItem text="Item5" onAction="#mockAction"/>
+                <MenuItem text="Exit" onAction="#exit"/>
+        </Menu>
+            <Menu text="Edit">
+                <MenuItem text="Item1" onAction="#mockAction"/>
+                <MenuItem text="Item2" onAction="#mockAction"/>
+                <MenuItem text="Item3" onAction="#mockAction"/>
+                <MenuItem text="Item4" onAction="#mockAction"/>
+                <MenuItem text="Item5" onAction="#mockAction"/>
+            </Menu>
+            <Menu text="View">
+                <MenuItem text="Item1" onAction="#mockAction"/>
+                <MenuItem text="Item2" onAction="#mockAction"/>
+                <MenuItem text="Item3" onAction="#mockAction"/>
+                <MenuItem text="Item4" onAction="#mockAction"/>
+                <MenuItem text="Item5" onAction="#mockAction"/>
+            </Menu>
+            <Menu text="Help">
+                <MenuItem text="Change nick" onAction="#showChangeNick"/>
+                <MenuItem text="Change password" onAction="#showChangePassword"/>
+                <MenuItem text="Register" onAction="#sendRegister"/>
+                <MenuItem text="Item4" onAction="#mockAction"/>
+                <MenuItem text="Delete my account" onAction="#sendEternalLogout"/>
+            </Menu>
+        </MenuBar>
+        <HBox VBox.vgrow="ALWAYS">
+            <TextArea fx:id="mainChatArea" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS" editable="false">
+                <HBox.margin>
+                    <Insets left="4.0" right="4.0">
+                    </Insets>
+                </HBox.margin>
+            </TextArea>
+
+            <ListView fx:id="contactList" prefWidth="130.0">
+                <HBox.margin>
+                    <Insets left="4.0" right="4.0">
+                    </Insets>
+                </HBox.margin>
+            </ListView>
+            <padding>
+                <Insets bottom="4.0" top="4.0">
+                </Insets>
+            </padding>
+        </HBox>
+
+        <HBox>
+            <TextField fx:id="inputField" HBox.hgrow="ALWAYS" prefHeight="60.0" onAction="#sendMessage">
+                <HBox.margin>
+                    <Insets left="4.0" right="4.0">
+                    </Insets>
+                </HBox.margin>
+            </TextField>
+
+            <Button fx:id="btnSendMessage" text="SEND" prefHeight="60.0" prefWidth="130" onAction="#sendMessage">
+                <HBox.margin>
+                    <Insets left="4.0" right="4.0">
+                    </Insets>
+                </HBox.margin>
+            </Button>
+            <padding>
+                <Insets bottom="4.0" top="4.0">
+                </Insets>
+            </padding>
+        </HBox>
+    </VBox>
+
+</AnchorPane>
