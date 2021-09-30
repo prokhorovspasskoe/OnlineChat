@@ -106,7 +106,7 @@ public class MainChatController implements Initializable, MessageProcessor {
                 loginPanel.setVisible(false);
                 mainChatPanel.setVisible(true);
                 for (int i = 0; i < 100; i++) {
-                    loggingToFile.readLogFile();
+                    mainChatArea.appendText(loggingToFile.readLogFile());
                 }
                 break;
             case "ERROR:":
