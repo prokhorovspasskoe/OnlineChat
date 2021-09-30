@@ -1,6 +1,7 @@
 package client_api.client_gui;
 
 import client_api.ChatMassageService;
+import client_api.LoggingToFile;
 import client_api.MessageProcessor;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -35,6 +36,7 @@ public class MainChatController implements Initializable, MessageProcessor {
     public ListView<String> contactList;
     private String nickName;
     public static final String REGEX = "%&%";
+    LoggingToFile loggingToFile;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,17 +69,20 @@ public class MainChatController implements Initializable, MessageProcessor {
         else message = "/w" + REGEX + recipient + REGEX + text;
         chatMassageService.send(message);
         inputField.clear();
+        loggingToFile.writeLogFile(message);
     }
 
     public void sendAuth(ActionEvent actionEvent) {
         if(loginField.getText().isBlank() || passwordField.getText().isBlank()) return;
 //        chatMassageService.connect();
         chatMassageService.send("/auth" + REGEX + loginField.getText() + REGEX + passwordField.getText());
+        loggingToFile = new LoggingToFile(loginField.getText() + ".txt");
     }
 
     public void sendRegister(ActionEvent actionEvent) {
         if(registerLoginField.getText().isBlank() || registerPasswordField.getText().isBlank() || registerNickNameField.getText().isBlank()) return;
         chatMassageService.send("/register" + REGEX + registerLoginField.getText() + REGEX + registerPasswordField.getText() + REGEX + registerNickNameField.getText());
+        loggingToFile = new LoggingToFile(registerLoginField.getText() + ".txt");
     }
 
     public void sendChangeNick(ActionEvent actionEvent) {
@@ -100,6 +105,9 @@ public class MainChatController implements Initializable, MessageProcessor {
                 this.nickName = parsedMessage[1];
                 loginPanel.setVisible(false);
                 mainChatPanel.setVisible(true);
+                for (int i = 0; i < 100; i++) {
+                    loggingToFile.readLogFile();
+                }
                 break;
             case "ERROR:":
                 showError(parsedMessage[1]);
@@ -124,6 +132,7 @@ public class MainChatController implements Initializable, MessageProcessor {
                 registerPanel.setVisible(true);
             default:
                 mainChatArea.appendText(parsedMessage[0] + System.lineSeparator());
+                loggingToFile.writeLogFile(parsedMessage[0]);
         }
     }
 
