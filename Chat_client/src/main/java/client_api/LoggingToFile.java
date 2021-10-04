@@ -41,6 +41,7 @@ public class LoggingToFile {
         try {
             FileWriter fileWriter = new FileWriter(logFile);
             fileWriter.append(log);
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
