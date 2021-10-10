@@ -12,6 +12,8 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Handler {
     private Socket socket;
@@ -34,7 +36,8 @@ public class Handler {
     }
 
     public void handle(Socket socket){
-        Thread handlerThread = new Thread(() -> {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.execute(() -> {
             authorize(socket);
             try {
                 while (!Thread.currentThread().isInterrupted() && socket.isConnected()) {
@@ -47,7 +50,20 @@ public class Handler {
                 server.removeAuthorizedClientFromList(this);
             }
         });
-        handlerThread.start();
+//        Thread handlerThread = new Thread(() -> {
+//            authorize(socket);
+//            try {
+//                while (!Thread.currentThread().isInterrupted() && socket.isConnected()) {
+//                    String message = in.readUTF();
+//                    handleMessage(message);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            } finally {
+//                server.removeAuthorizedClientFromList(this);
+//            }
+//        });
+//        handlerThread.start();
     }
 
     private void authorize(Socket socket){
