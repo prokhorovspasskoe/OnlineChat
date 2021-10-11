@@ -12,6 +12,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -37,6 +40,7 @@ public class MainChatController implements Initializable, MessageProcessor {
     private String nickName;
     public static final String REGEX = "%&%";
     LoggingToFile loggingToFile;
+    private static final Logger log = LogManager.getLogger();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,6 +74,7 @@ public class MainChatController implements Initializable, MessageProcessor {
         chatMassageService.send(message);
         inputField.clear();
         loggingToFile.writeLogFile(message);
+        log.info("Send message");
     }
 
     public void sendAuth(ActionEvent actionEvent) {
@@ -77,12 +82,14 @@ public class MainChatController implements Initializable, MessageProcessor {
 //        chatMassageService.connect();
         chatMassageService.send("/auth" + REGEX + loginField.getText() + REGEX + passwordField.getText());
         loggingToFile = new LoggingToFile(loginField.getText() + ".txt");
+        log.info("Send auth");
     }
 
     public void sendRegister(ActionEvent actionEvent) {
         if(registerLoginField.getText().isBlank() || registerPasswordField.getText().isBlank() || registerNickNameField.getText().isBlank()) return;
         chatMassageService.send("/register" + REGEX + registerLoginField.getText() + REGEX + registerPasswordField.getText() + REGEX + registerNickNameField.getText());
         loggingToFile = new LoggingToFile(registerLoginField.getText() + ".txt");
+        log.info("Send register");
     }
 
     public void sendChangeNick(ActionEvent actionEvent) {
@@ -92,7 +99,9 @@ public class MainChatController implements Initializable, MessageProcessor {
 
     public void sendChangePass(ActionEvent actionEvent) {
         if(newPasswordField.getText().isBlank() || oldPassField.getText().isBlank()) return;
-        chatMassageService.send("/change_pass" + REGEX + oldPassField.getText() + REGEX + newPasswordField.getText());}
+        chatMassageService.send("/change_pass" + REGEX + oldPassField.getText() + REGEX + newPasswordField.getText());
+        log.info("Send change password");
+    }
 
     public void sendEternalLogout(ActionEvent actionEvent) {
         chatMassageService.send("/remove");
@@ -108,6 +117,7 @@ public class MainChatController implements Initializable, MessageProcessor {
                 for (int i = 0; i < 100; i++) {
                     mainChatArea.appendText(loggingToFile.readLogFile());
                 }
+                log.info("authOk");
                 break;
             case "ERROR:":
                 showError(parsedMessage[1]);
@@ -122,14 +132,17 @@ public class MainChatController implements Initializable, MessageProcessor {
             case "/change_nick_ok":
                 changeNickPanel.setVisible(false);
                 mainChatPanel.setVisible(true);
+                log.info("Change nick Ok");
                 break;
             case "/change_password_ok":
                 changePasswordPanel.setVisible(false);
                 mainChatPanel.setVisible(true);
+                log.info("Change password ok");
                 break;
             case "/register_ok":
                 mainChatPanel.setVisible(false);
                 registerPanel.setVisible(true);
+                log.info("Register ok");
             default:
                 mainChatArea.appendText(parsedMessage[0] + System.lineSeparator());
                 loggingToFile.writeLogFile(parsedMessage[0]);
@@ -141,6 +154,7 @@ public class MainChatController implements Initializable, MessageProcessor {
         alert.setTitle("ERROR!");
         alert.setHeaderText(message);
         alert.showAndWait();
+        log.error("Error");
     }
 
     public void returnToChat(ActionEvent actionEvent) {
