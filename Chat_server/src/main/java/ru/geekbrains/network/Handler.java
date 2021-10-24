@@ -1,5 +1,7 @@
 package ru.geekbrains.network;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.geekbrains.network.error.UserNotFoundException;
 import ru.geekbrains.network.error.WrongCredentialsException;
 
@@ -22,13 +24,15 @@ public class Handler {
     private Server server;
     private String currentUser;
     public static final String REGEX = "%&%";
+    private static final Logger log = LogManager.getLogger();
 
     public Handler(Socket socket, Server server) {
         try{
             this.socket = socket;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
-            System.out.println("Handler created.");
+            log.info("Handler created.");
+//            System.out.println("Handler created.");
             this.server = server;
         }catch (IOException e){
             e.printStackTrace();
@@ -81,9 +85,9 @@ public class Handler {
                         throw new SocketTimeoutException();
                     }
                 } catch (SocketTimeoutException socketTimeoutException) {
-                    System.out.print("The connection was interrupted due to a timeout...\n");
+                    log.warn("The connection was interrupted due to a timeout...");
                 }
-                System.out.print("Authorization error!\n");
+                log.error("Authorization error!");
             }
         }
     }

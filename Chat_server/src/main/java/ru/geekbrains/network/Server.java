@@ -1,5 +1,7 @@
 package ru.geekbrains.network;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.geekbrains.network.auth.AuthService;
 import ru.geekbrains.network.auth.DatabaseAuthService;
 import ru.geekbrains.network.auth.InMemoryAuthService;
@@ -16,6 +18,7 @@ public class Server {
     private AuthService authService;
 //    private List<Handler> handlers;
     private Map<String, Handler> handlers;
+    private static final Logger log = LogManager.getLogger();
 
     public Server() {
 //        this.authService = new InMemoryAuthService();
@@ -26,15 +29,19 @@ public class Server {
 
     public void start(){
         try(ServerSocket serverSocket = new ServerSocket(PORT)){
-            System.out.println("Server start.");
+            //System.out.println("Server start.");
+            log.info("Server start.");
             while (true){
-                System.out.println("Waiting for connection...");
+//                System.out.println("Waiting for connection...");
+                log.info("Waiting for connection...");
                 Socket socket = serverSocket.accept();
-                System.out.println("Client connected.");
+//                System.out.println("Client connected.");
+                log.info("Client connected.");
                 new Handler(socket, this).handle(socket);
             }
         }catch (IOException e){
-            System.out.println("The server is disabled...");
+            log.info("The server is disabled...");
+//            System.out.println("The server is disabled...");
         }
     }
 
@@ -43,6 +50,7 @@ public class Server {
         for (Handler handler: handlers.values()) {
             handler.sendMassage(message);
         }
+        log.info("Send broadcast massage.");
     }
 
     public synchronized void removeAuthorizedClientFromList(Handler handler){
@@ -79,6 +87,7 @@ public class Server {
         message = String.format("[%s] -> [%s]: %s", sender, recipient, message);
         handler.sendMassage(message);
         senderHandler.sendMassage(message);
+        log.info("Send private massage.");
     }
 
     public boolean isNickNameBusy(String nickname){

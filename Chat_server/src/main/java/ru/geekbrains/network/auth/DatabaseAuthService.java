@@ -1,5 +1,7 @@
 package ru.geekbrains.network.auth;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ru.geekbrains.network.error.BadRequestException;
 
 import java.sql.*;
@@ -10,6 +12,7 @@ public class DatabaseAuthService implements AuthService{
     private Statement statement;
     private PreparedStatement preparedStatement;
     private String preUpdateNickName = "UPDATE authorization_data SET nickname = ? WHERE nickname = ?;";
+    private static final Logger log = LogManager.getLogger();
 
     @Override
     public void Start() throws SQLException {
@@ -17,6 +20,7 @@ public class DatabaseAuthService implements AuthService{
         statement = connection.createStatement();
         statement.execute("CREATE TABLE IF NOT EXISTS authorization_data (id integer primary key autoincrement," +
                 " login text, password text, nickname text);");
+        log.info("Database start.");
     }
 
     @Override
@@ -26,6 +30,8 @@ public class DatabaseAuthService implements AuthService{
             if(connection != null) connection.close();
         }catch (SQLException e){
             e.printStackTrace();
+        }finally {
+            log.info("Database stop.");
         }
     }
 
@@ -47,7 +53,10 @@ public class DatabaseAuthService implements AuthService{
 
         int updateResult = preparedStatement.executeUpdate();
 
-        if(updateResult == 0) throw new BadRequestException("Error change nickname.");
+        if(updateResult == 0) {
+            log.error("Error change nickname.");
+            throw new BadRequestException("Error change nickname.");
+        }
 
         return newNick;
     }
