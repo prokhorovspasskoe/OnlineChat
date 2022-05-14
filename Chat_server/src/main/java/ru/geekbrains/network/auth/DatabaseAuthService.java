@@ -60,8 +60,8 @@ public class DatabaseAuthService implements AuthService{
 
     @Override
     public void changePassword(String nickname, String oldPassword, String newPassword) throws SQLException {
-        String preUpdateNickName = "UPDATE authorization_data SET password = ? WHERE password = ?;";
-        PreparedStatement preparedStatement = connection.prepareStatement(preUpdateNickName);
+        String preUpdatePassword = "UPDATE authorization_data SET password = ? WHERE password = ?;";
+        PreparedStatement preparedStatement = connection.prepareStatement(preUpdatePassword);
         preparedStatement.setString(1, newPassword);
         preparedStatement.setString(2, oldPassword);
 
@@ -74,12 +74,32 @@ public class DatabaseAuthService implements AuthService{
     }
 
     @Override
-    public void createNewUser(String login, String password, String nickname) throws BackingStoreException {
+    public void createNewUser(String login, String password, String nickname) throws SQLException {
+        String preCreateNewUser = "INSERT INTO authorization_data (login, password, nickname) values(?, ?, ?);";
+        PreparedStatement preparedStatement = connection.prepareStatement(preCreateNewUser);
+        preparedStatement.setString(1, login);
+        preparedStatement.setString(2, password);
+        preparedStatement.setString(3, nickname);
 
+        int updateResult = preparedStatement.executeUpdate();
+
+        if(updateResult == 0) {
+            log.error("Error create new user.");
+            throw new BadRequestException("Error create new user.");
+        }
     }
 
     @Override
-    public void deleteUser(String nickname) {
+    public void deleteUser(String nickname) throws SQLException {
+        String preDeleteUser = "DELETE FROM authorization_data WHERE nickname = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(preDeleteUser);
+        preparedStatement.setString(1, nickname);
 
+        int updateResult = preparedStatement.executeUpdate();
+
+        if(updateResult == 0) {
+            log.error("Error delete user.");
+            throw new BadRequestException("Error delete user.");
+        }
     }
 }

@@ -9,6 +9,6 @@ public interface AuthService {
     String getNicknameByLoginAndPassword(String login, String password) throws SQLException;
     String changeNickname(String OldNick, String newNick) throws SQLException;
     void changePassword(String nickname, String oldPassword, String newPassword) throws SQLException;
-    void createNewUser(String login, String password, String nickname) throws BackingStoreException;
-    void deleteUser(String nickname);
+    void createNewUser(String login, String password, String nickname) throws BackingStoreException, SQLException;
+    void deleteUser(String nickname) throws SQLException;
 }
