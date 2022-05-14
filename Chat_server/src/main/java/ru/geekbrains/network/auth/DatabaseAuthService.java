@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import ru.geekbrains.network.error.BadRequestException;
 
 import java.sql.*;
-import java.util.prefs.BackingStoreException;
 
 public class DatabaseAuthService implements AuthService{
     private Connection connection;
