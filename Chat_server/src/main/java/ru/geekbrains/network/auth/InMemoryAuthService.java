@@ -3,12 +3,9 @@ package ru.geekbrains.network.auth;
 import ru.geekbrains.network.error.BadRequestException;
 import ru.geekbrains.network.error.UserNotFoundException;
 import ru.geekbrains.network.error.WrongCredentialsException;
-
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.prefs.BackingStoreException;
 
 public class InMemoryAuthService implements AuthService{
     private List<User> users;

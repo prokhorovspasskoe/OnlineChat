@@ -16,32 +16,25 @@ import java.util.Map;
 public class Server {
     private static final int PORT = 8089;
     private AuthService authService;
-//    private List<Handler> handlers;
     private Map<String, Handler> handlers;
     private static final Logger log = LogManager.getLogger();
 
     public Server() {
-//        this.authService = new InMemoryAuthService();
         this.authService = new DatabaseAuthService();
-//        this.handlers = new ArrayList<>();
         this.handlers = new HashMap<>();
     }
 
     public void start(){
         try(ServerSocket serverSocket = new ServerSocket(PORT)){
-            //System.out.println("Server start.");
             log.info("Server start.");
             while (true){
-//                System.out.println("Waiting for connection...");
                 log.info("Waiting for connection...");
                 Socket socket = serverSocket.accept();
-//                System.out.println("Client connected.");
                 log.info("Client connected.");
                 new Handler(socket, this).handle(socket);
             }
         }catch (IOException e){
             log.info("The server is disabled...");
-//            System.out.println("The server is disabled...");
         }
     }
 

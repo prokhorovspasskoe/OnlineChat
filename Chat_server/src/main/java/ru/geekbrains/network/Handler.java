@@ -2,18 +2,12 @@ package ru.geekbrains.network;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ru.geekbrains.network.error.UserNotFoundException;
-import ru.geekbrains.network.error.WrongCredentialsException;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -32,7 +26,6 @@ public class Handler {
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
             log.info("Handler created.");
-//            System.out.println("Handler created.");
             this.server = server;
         }catch (IOException e){
             e.printStackTrace();
@@ -54,20 +47,6 @@ public class Handler {
                 server.removeAuthorizedClientFromList(this);
             }
         });
-//        Thread handlerThread = new Thread(() -> {
-//            authorize(socket);
-//            try {
-//                while (!Thread.currentThread().isInterrupted() && socket.isConnected()) {
-//                    String message = in.readUTF();
-//                    handleMessage(message);
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            } finally {
-//                server.removeAuthorizedClientFromList(this);
-//            }
-//        });
-//        handlerThread.start();
     }
 
     private void authorize(Socket socket){

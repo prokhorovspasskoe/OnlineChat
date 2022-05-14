@@ -16,7 +16,6 @@ public class ClientApp extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(this.getClass().getResource("/main_chat.fxml"));
         Parent parent = loader.load();
-
         Scene scene = new Scene(parent);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Online chat");
